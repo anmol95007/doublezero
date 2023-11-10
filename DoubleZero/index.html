@@ -1502,7 +1502,8 @@
                     <div class="g-recaptcha" data-sitekey="6Lddu_woAAAAAOGvRaBRgYvFM7Ww4Z8t-FCImy7v"></div>
                   </div>
                   <div class="my-3 col-12">
-                    <div class="loading visible" >Loading</div>
+                    <div class="captch-select">Please Fill the captcha then only ou can submit your form</div>
+                    <!-- <div class="loading visible" >Loading</div> -->
                     <!-- <div class="error-message"></div> -->
                     <div class="sent-message">
                       Your message has been sent. Thank you!
@@ -1632,39 +1633,52 @@
        <!-- Send form data -->
        <script>
         document.querySelector('.php-email-form').addEventListener('submit', async function (e) {
-          e.preventDefault();
-      
-          // Show the loading element
-            document.querySelector('.loading').classList.add('visible');
-      
-          const formData = new FormData(this);
-      
-          try {
-            const response = await fetch('http://54.79.55.26:5000/send-mail', {
-              method: 'POST',
-              body: formData,
-            });
-      
-            const result = await response.json();
-            console.log(result);
-      
-            // Reset the form if the submission was successful
-            this.reset();
-      
-            // Reset reCAPTCHA
-            grecaptcha.reset();
-            location.reload();
-      
-           // Hide the loading element
-            document.querySelector('.loading').classList.remove('visible');
-      
-          } catch (error) {
-            console.error('Error:', error);
-      
-             // Hide the loading element in case of an error
-               document.querySelector('.loading').classList.remove('visible');
-          }
-        });
+                  e.preventDefault();
+
+                  // Check if reCAPTCHA is clicked
+                  const recaptchaResponse = grecaptcha.getResponse();
+                  if (!recaptchaResponse) {
+                    // Show an error message to the user
+                    document.querySelector('.captch-select').style.display = 'block';
+                    return;
+                  }
+                 
+                  // Show the loading element
+                  document.querySelector('.captch-select').style.display = 'none';
+                  const formData = new FormData(this);
+                 
+                  try {
+                    const response = await fetch('http://localhost:5000/send-mail', {
+                      method: 'POST',
+                      body: formData,
+                    });
+
+                    const result = await response.json();
+                    console.log(result);
+                     
+                    
+                   
+
+                    // Reset the form if the submission was successful
+                    this.reset();
+
+                    // Reset reCAPTCHA
+                    grecaptcha.reset();
+
+                    location.reload();
+
+                    // Hide the loading element
+                   
+
+
+                  } catch (error) {
+                    console.error('Error:', error);
+
+                    // Hide the loading element in case of an error
+                    // document.querySelector('.loading').classList.remove('visible');
+                  }
+                });
+
       </script>
                        
     <!-- Vendor JS Files -->
