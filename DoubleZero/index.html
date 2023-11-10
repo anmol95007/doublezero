@@ -46,6 +46,7 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   </head>
 
   <body>
@@ -114,7 +115,7 @@
         <div class="row justify-content-center">
           <div class="col-xl-7 col-lg-9 text-center">
             <h1>DoubleZero Technology Solution</h1>
-            <h2>We Are Team Of Talented It Experts.</h2>
+            <h2>We are a team of talented IT experts.</h2>
           </div>
         </div>
         <div class="text-center">
@@ -1436,20 +1437,23 @@
                 <div class="email">
                   <i class="bi bi-envelope"></i>
                   <h4>Email:</h4>
-                  <p>info@doublezero.ae</p>
+                  <a href="mailto:info@doublezero.ae?">
+                     <p>info@doublezero.ae</p></a>
                 </div>
 
                 <div class="phone">
                   <i class="bi bi-phone"></i>
                   <h4>Call:</h4>
-                  <p>+971 58 584 7413</p>
+                  <a href="tel:+971585847413"><p>+971 58 584 7413</p></a>
+                  
                 </div>
               </div>
             </div>
 
             <div class="col-lg-8 mt-5 mt-lg-0">
               <form
-                action="forms/contact.php"
+                id="emailForm"
+                action="http://localhost:5000/send-mail"
                 method="post"
                 role="form"
                 class="php-email-form"
@@ -1494,15 +1498,18 @@
                       required
                     ></textarea>
                   </div>
+                  <div class="col-md-6 form-group">
+                    <div class="g-recaptcha" data-sitekey="6Lddu_woAAAAAOGvRaBRgYvFM7Ww4Z8t-FCImy7v"></div>
+                  </div>
                   <div class="my-3 col-12">
-                    <div class="loading">Loading</div>
-                    <div class="error-message"></div>
+                    <div class="loading visible" >Loading</div>
+                    <!-- <div class="error-message"></div> -->
                     <div class="sent-message">
                       Your message has been sent. Thank you!
                     </div>
                   </div>
                   <div class="text-center col-12">
-                    <button type="submit">Send Message</button>
+                    <button type="submit" onclick="sendFormData()">Send Message</button>
                   </div>
                 </div>
               </form>
@@ -1602,7 +1609,7 @@
             <!-- You can delete the links only if you purchased the pro version. -->
             <!-- Licensing information: https://bootstrapmade.com/license/ -->
             <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/onepage-multipurpose-bootstrap-template/ -->
-            Designed by <a href="https://bootstrapmade.com/">DoubleZero</a>
+            Designed by <a href="#">DoubleZero</a>
           </div>
         </div>
         <div class="social-links text-center text-md-right pt-3 pt-md-0">
@@ -1622,7 +1629,44 @@
       class="back-to-top d-flex align-items-center justify-content-center"
       ><i class="bi bi-arrow-up-short"></i
     ></a>
-
+       <!-- Send form data -->
+       <script>
+        document.querySelector('.php-email-form').addEventListener('submit', async function (e) {
+          e.preventDefault();
+      
+          // Show the loading element
+            document.querySelector('.loading').classList.add('visible');
+      
+          const formData = new FormData(this);
+      
+          try {
+            const response = await fetch('http://54.79.55.26:5000/send-mail', {
+              method: 'POST',
+              body: formData,
+            });
+      
+            const result = await response.json();
+            console.log(result);
+      
+            // Reset the form if the submission was successful
+            this.reset();
+      
+            // Reset reCAPTCHA
+            grecaptcha.reset();
+            location.reload();
+      
+           // Hide the loading element
+            document.querySelector('.loading').classList.remove('visible');
+      
+          } catch (error) {
+            console.error('Error:', error);
+      
+             // Hide the loading element in case of an error
+               document.querySelector('.loading').classList.remove('visible');
+          }
+        });
+      </script>
+                       
     <!-- Vendor JS Files -->
     <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
     <script src="assets/vendor/aos/aos.js"></script>

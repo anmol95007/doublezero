@@ -37,6 +37,14 @@ h6 {
   font-family: "Raleway", sans-serif;
 }
 
+.loading.visible {
+  display: block;
+}
+
+.loading {
+  display: none;
+}
+
 /*--------------------------------------------------------------
 # Back to top button
 --------------------------------------------------------------*/
